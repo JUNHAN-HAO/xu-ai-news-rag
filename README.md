@@ -1,310 +1,190 @@
-# 🚀 Auto-Blog: Automated AI-Powered Blogging Platform
+# XU-News-AI-RAG: Personalized News Intelligent Knowledge Base
 
-A professional Next.js blogging platform with advanced AI-driven content generation. Auto-Blog leverages RSS feed analysis and Retrieval-Augmented Generation (RAG) to create high-quality, SEO-optimized blog content automatically. Built for content creators, marketers, and businesses who want to scale their blogging efforts with AI assistance.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.0%2B-green.svg)](https://spring.io/projects/spring-boot)
+[![Ollama](https://img.shields.io/badge/Ollama-qwen2.5:3b-orange.svg)](https://ollama.com/)
 
-[![Next.js](https://img.shields.io/badge/Next.js-14.0+-000000?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-007ACC?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python)](https://www.python.org/)
-[![Ollama](https://img.shields.io/badge/Ollama-Local_LLM-orange?style=for-the-badge)](https://ollama.ai/)
+## Project Overview
 
-![alt text](<Screenshot 2025-10-08 at 02.24.33.png>)
+XU-News-AI-RAG is an advanced, AI-powered knowledge base system designed for personalized news aggregation and intelligent querying. It leverages RSS feeds, web scraping (with ethical compliance), and Retrieval-Augmented Generation (RAG) to build a robust, searchable repository of news articles. Deployed with local LLMs via Ollama, the system supports semantic search, data management, and automated workflows, making it ideal for users seeking curated, context-aware news insights. This project extends the foundational concepts from [Auto-Blog](https://github.com/kliewerdaniel/autoblog01) by shifting focus to news-specific RAG, integrating Spring Security for secure user authentication, and adding features like email notifications and clustering analytics.
 
+Key goals:
+- Automate news ingestion while respecting robots.txt and rate limits.
+- Enable secure, user-friendly knowledge base interactions.
+- Provide fallback web searches for comprehensive query responses.
 
-## ✨ Features
+## Features
 
-- 🎨 **Modern Next.js Boilerplate**: Production-ready blog site with TypeScript, Tailwind CSS
-- 🤖 **Automated Content Generation**: `automated_blog_generator.py` - RSS-driven AI blog posts
-- 📡 **RSS Feed Integration**: Automatic article fetching from configurable RSS sources
-- 🔍 **Semantic Search**: ChromaDB-powered knowledge base for consistent content
-- 🎯 **SEO Optimized**: Built-in meta tags, sitemaps, and search engine optimization
-- 📱 **Responsive Design**: Mobile-first, SEO-friendly blog layout
-- ⚡ **Static Generation**: Fast loading with modern web performance practices
-- 🎭 **Agent Architecture**: Specialized AI agents for research, writing, and editing
+1. **Automated News Ingestion**:
+   - Scheduled RSS feed parsing and ethical web scraping using tools like Feedparser and Selenium.
+   - Intelligent agent-based fetching for dynamic content, ensuring compliance with crawling norms.
 
-## 🏗️ Architecture Overview
+2. **Local AI-Powered Knowledge Base**:
+   - Built with ChromaDB for vector storage, supporting both structured (Excel/CSV) and unstructured data.
+   - Embedding model: `all-MiniLM-L6-v2` for efficient semantic vectorization.
+   - Reranking model: `ms-marco-MiniLM-L-6-v2` for refined result relevance.
 
-```
-RSS Feeds → Fetcher → Knowledge Base → AI Agents → Generated Posts → Next.js Site
-     ↓         ↓           ↓           ↓           ↓             ↓
-   News     Ingest     ChromaDB     Research    SEO-Optimized  Static Blog
-  Articles  Vector     Optimized    →Write→     Rich Content   Posts
-             Store     Retrieval    →Edit→     →Publish
-```
+3. **LLM Integration**:
+   - Ollama deployment with `qwen2.5:3b` for local inference, enabling RAG-based generation and query augmentation.
 
-## 🚀 Quick Start
+4. **Email Notifications**:
+   - Automatic alerts on successful data ingestion, with customizable titles and content via SMTP.
+
+5. **Secure User Authentication**:
+   - JWT-based login using Spring Security, with role-based access for admin and standard users.
+
+6. **Knowledge Base Management**:
+   - Dashboard for viewing data lists (filter by type, time, tags).
+   - Single/batch delete, metadata editing (e.g., tags, sources), and multi-format uploads (PDF, Excel, text).
+
+7. **Semantic Query Interface**:
+   - User-driven natural language search with similarity-ranked results from the knowledge base.
+   - Fallback to real-time web search (e.g., Baidu API) if no matches found, returning top 3 results refined by LLM.
+
+8. **Analytics & Insights**:
+   - Top-10 keyword distribution via clustering reports, generated on-demand for knowledge base overviews.
+
+## Technology Stack
+
+- **Backend**: Spring Boot (Java) for API, authentication, and scheduling; Python for ingestion scripts.
+- **Frontend**: Next.js (React, TypeScript) with Tailwind CSS for responsive UI.
+- **AI/LLM**: Ollama (`qwen2.5:3b`), Hugging Face Transformers for embeddings (`all-MiniLM-L6-v2`, `ms-marco-MiniLM-L-6-v2`).
+- **Vector Database**: ChromaDB for RAG retrieval.
+- **Ingestion**: Feedparser (RSS), Selenium/BeautifulSoup (scraping), Apache Commons for Excel handling.
+- **Security**: Spring Security with JWT tokens.
+- **Other**: Quartz Scheduler (tasks), Spring Mail (notifications), scikit-learn (clustering), Baidu Search API (fallback).
+
+## Installation & Setup
 
 ### Prerequisites
+- Java 17+ (for Spring Boot)
+- Node.js 18+ (for Next.js)
+- Python 3.8+ (for ingestion)
+- Ollama installed and running locally
+- PostgreSQL/MySQL (for user data persistence)
+- Redis (optional, for session caching)
 
-- **Node.js 18+**
-- **Python 3.8+**
-- **Ollama** running with compatible LLM
-
-### 1. Install Dependencies
-
+### 1. Clone and Install Dependencies
 ```bash
-# Install Python dependencies
-pip install -r requirements.txt
+git clone https://github.com/yourusername/xu-ai-news-rag.git
+cd xu-ai-news-rag
 
-# Install Node.js dependencies
+# Backend
+cd backend
+mvn clean install
+pip install -r requirements.txt  # For Python ingestion scripts
+
+# Frontend
+cd ../frontend
 npm install
 ```
 
 ### 2. Set Up Ollama
-
 ```bash
-# Install Ollama
 curl -fsSL https://ollama.ai/install.sh | sh
-
-# Pull a compatible model (recommended: 14B+ parameters)
-ollama pull llama2:13b-chat
-# or
-ollama pull mistral:7b-instruct
+ollama pull qwen2.5:3b
 ```
 
-### 3. Configure RSS Feeds
-
-Edit `feeds.yaml` to add your preferred RSS sources:
-
-```yaml
-feeds:
-  - https://example.com/rss.xml
-  - https://techcrunch.com/rss/
-  - https://dev.to/rss
-```
-
-### 4. Generate Your First Blog Post
-
-```bash
-python automated_blog_generator.py
-```
-
-This command will:
-- Fetch articles from your RSS feeds
-- Build a comprehensive knowledge base
-- Generate SEO-optimized blog content
-- Save posts to `content/blog/`
-- Update the knowledge base for future generations
-
-The generated posts are automatically compatible with your Next.js site!
-
-### 5. Run the Blog Site
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to see your blog.
-
-## 📝 Automated Blog Generation
-
-### How It Works
-
-The `automated_blog_generator.py` script is the core content creation engine:
-
-1. **Feed Aggregation**: Fetches and processes RSS articles
-2. **Knowledge Building**: Vectorizes content for semantic search
-3. **Context Synthesis**: Uses RAG to find patterns and themes
-4. **AI Generation**: Multi-agent pipeline creates polished content
-5. **SEO Optimization**: Built-in keyword research and meta generation
-6. **Content Integration**: Seamlessly integrates with Next.js structure
-
-### Generation Options
-
-Run the generator with custom parameters:
-
-```bash
-# Basic generation
-python automated_blog_generator.py
-
-# Force refresh knowledge base
-export FORCE_REFRESH=true
-python automated_blog_generator.py
-
-# Check logs
-tail -f automated_blog_generator.log
-```
-
-### Blog Post Format
-
-Generated posts include proper Next.js frontmatter:
-
-```markdown
----
-title: "Generated Post Title"
-date: "2025-01-07"
-excerpt: "SEO-optimized description..."
-categories: ["Tech", "AI"]
-tags: ["automation", "blogs"]
-image: "/images/posts/generated-post.jpg"
----
-
-# Content here...
-```
-
-## 🛠️ Development
-
-### Project Structure
-
-```
-auto-blog/
-├── automated_blog_generator.py    # 🏆 Primary content generator
-├── agent/                        # AI agent system
-│   ├── agents/                  # Specialized agents
-│   ├── prompts/                 # LLM prompt templates
-│   ├── llm_client.py           # Ollama integration
-│   └── vector_store.py         # ChromaDB operations
-├── content/                     # Generated blog content
-├── src/app/                     # Next.js application
-│   ├── blog/                   # Blog pages & components
-│   ├── components/             # Reusable UI components
-│   └── globals.css             # Global styles
-├── feeds.yaml                  # RSS feed configuration
-├── package.json                # Node.js dependencies
-├── requirements.txt            # Python dependencies
-└── README.md                   # This file
-```
-
-### Available Scripts
-
-**Next.js Commands:**
-```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-```
-
-**Content Generation:**
-```bash
-# All-in-one generation
-python automated_blog_generator.py
-
-# Run individual components
-python fetcher.py    # Only fetch RSS feeds
-python run_agentic_blog.py  # Use existing knowledge base
-```
-
-**Agent CLI (Advanced):**
-```bash
-# Ingest existing content
-python agent/cli.py ingest
-
-# Generate with specific parameters
-python agent/cli.py generate "Your Topic" --style technical --length long
-```
-
-### Customization
-
-#### Modify Agent Behavior
-
-Edit `agent/prompts/system_prompts.py` to customize AI behavior:
-
-```python
-WRITER_AGENT_PROMPT = """
-You are a technical blogger who writes in a conversational tone...
-"""
-```
-
-#### Add RSS Feeds
-
-Add sources to `feeds.yaml` for different content domains:
-
-```yaml
-feeds:
-  - https://techcrunch.com/rss/
-  - https://dev.to/rss
-  - https://news.ycombinator.com/rss
-  - https://github.blog/rss/
-```
-
-## 🎨 Blog Features
-
-- **Static Generation**: Fast loading, great SEO
-- **Markdown Support**: Full CommonMark compliance
-- **Syntax Highlighting**: Code blocks with Prism.js
-- **Table of Contents**: Auto-generated post navigation
-- **Search Functionality**: Client-side content search
-- **Categories & Tags**: Content organization
-- **Responsive Images**: Optimized lazy loading
-- **Dark Mode**: System-aware theme switching
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Create `.env.local` for custom settings:
-
+### 3. Configure Environment
+Create `.env` files in `backend` and `frontend`:
 ```env
-# Ollama Configuration
-OLLAMA_MODEL=llama2:13b-chat
-OLLAMA_BASE_URL=http://localhost:11434
+# backend/.env
+DB_URL=jdbc:postgresql://localhost:5432/newsdb
+JWT_SECRET=your-jwt-secret-key
+OLLAMA_URL=http://localhost:11434
+EMAIL_HOST=smtp.gmail.com
+EMAIL_FROM=your-email@gmail.com
+BAIDU_API_KEY=your-baidu-key  # For fallback search
 
-# Content Settings
-MAX_POSTS_PER_GENERATION=5
-TARGET_WORD_COUNT_MIN=1200
-TARGET_WORD_COUNT_MAX=2500
+# feeds.yaml (in backend/ingestion)
+feeds:
+  - https://news.example.com/rss.xml
+  - https://techcrunch.com/feed/
 ```
 
-### Netlify Deployment
-
-The project includes `netlify.toml` with optimized settings:
-
-```toml
-[build]
-  command = "npm run build"
-  publish = "out"
-
-[build.environment]
-  NODE_VERSION = "18"
+### 4. Run Ingestion Script (Test)
+```bash
+cd backend/ingestion
+python news_ingestor.py --schedule  # Fetches RSS, embeds to ChromaDB, sends email
 ```
 
-## 📊 Performance
+### 5. Start Services
+```bash
+# Backend (Spring Boot)
+cd backend
+mvn spring-boot:run  # API at http://localhost:8080
 
-### Generation Benchmarks
-- **RSS Fetching**: ~50-100 articles/minute
-- **Content Vectorization**: ~100 posts/minute
-- **Blog Generation**: 2-5 minutes per post
-- **Knowledge Base**: ~1GB per 1000 processed articles
+# Frontend
+cd frontend
+npm run dev  # UI at http://localhost:3000
+```
 
-### Site Performance
-- **Lighthouse Score**: 95+ on all metrics
-- **First Contentful Paint**: <1.2s
-- **Time to Interactive**: <2.5s
-- **Static Asset Optimization**: 90%+ compression
+### 6. Initial Setup
+- Access `/api/auth/register` to create an admin user.
+- Run clustering script: `python analytics/cluster_keywords.py` for initial report.
 
-## 🤝 Contributing
+## Usage
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+- **Login**: Navigate to `/login` and authenticate via JWT.
+- **Ingest News**: Trigger via scheduler or manual API call (`/api/ingest`).
+- **Query Knowledge Base**: Use `/search` endpoint or UI search bar for semantic queries.
+- **Manage Data**: Dashboard at `/dashboard` for CRUD operations.
+- **View Analytics**: `/analytics` for keyword clusters.
 
-## 📄 License
+Example RAG Query Flow:
+1. User asks: "Latest AI news on ethics."
+2. Retrieve top matches from ChromaDB (reranked).
+3. If empty, query Baidu API, fetch top 3, embed, and LLM-summarize.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Key Integrations (Adapted from Auto-Blog)
 
-## 🙏 Acknowledgments
+- **RSS Ingestion**: Extended from `automated_blog_generator.py` to `news_ingestor.py`, adding Excel parsing and email hooks.
+- **Ollama RAG**: Updated `llm_client.py` to use `qwen2.5:3b`; integrated with Spring endpoints.
+- **ChromaDB Management**: Enhanced `vector_store.py` for uploads/deletes; UI tied to Spring Security.
+- **Fallback Search**: New `web_fallback.py` using Baidu API, chained to LLM for response generation.
 
-- **Next.js** - The React framework for production
-- **Ollama** - Local LLM execution
-- **ChromaDB** - Vector database for semantic search
-- **SentenceTransformers** - Text embedding models
-- **Feedparser** - RSS/Atom feed parsing
+## Contributing
 
-## 🚦 Roadmap
+1. Fork the repo.
+2. Create a feature branch (`git checkout -b feature/news-fallback`).
+3. Commit changes (`git commit -m 'Add Baidu fallback'`).
+4. Push and open a PR.
 
-- [ ] Multi-language content generation
-- [ ] Advanced SEO analytics dashboard
-- [ ] Automated image generation for posts
-- [ ] Social media integration
-- [ ] Newsletter automation
-- [ ] Content calendar management
-- [ ] Performance optimization suite
+Follow PEP8 for Python and Spring conventions for Java. Report issues via GitHub.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-**Auto-Blog: Scale Your Content, Multiply Your Impact.**
+## Suggested Initial Adjustments
 
-Built with ❤️ for content creators who want to leverage AI for automated, professional blogging.
+Based on the Auto-Blog foundation, prioritize these adjustments to align with your XU-News-AI-RAG requirements. Start with core backend integrations before UI polish—this ensures a functional MVP quickly. Estimated order (1-2 days per step, assuming familiarity):
 
+1. **Integrate Specific Ollama Model and Embeddings (High Priority - 1 Day)**:
+   - In `agent/llm_client.py` and `vector_store.py`, replace `llama2:13b-chat` with `qwen2.5:3b`.
+   - Update SentenceTransformers to `all-MiniLM-L6-v2` for embeddings; add `ms-marco-MiniLM-L-6-v2` for reranking in the RAG pipeline (use Hugging Face pipeline).
+   - Test: Run `python automated_blog_generator.py` (rename to `news_ingestor.py`) and verify vectors in ChromaDB.
+
+2. **Add Spring Security JWT for User Login (High Priority - 1-2 Days)**:
+   - Shift auth from GitHub OAuth to Spring Boot backend: Add Spring Security dependencies (`spring-boot-starter-security`, `jjwt`).
+   - Implement `/auth/login` and `/auth/register` endpoints with JWT generation.
+   - Secure all management APIs (e.g., `/api/kb/delete`). Update Next.js frontend to use JWT tokens for API calls.
+   - Why first? This gates all user-facing features like management and queries.
+
+3. **Enhance Ingestion with Scheduling, Excel Support, and Email (Medium Priority - 1 Day)**:
+   - Use Quartz in Spring Boot for RSS timing (e.g., cron every 6 hours).
+   - In `news_ingestor.py`, add pandas/openpyxl for Excel structured data parsing.
+   - Integrate `smtplib` or Spring Mail for post-ingestion emails (customize subject: "New News Ingested: {count} Items").
+
+4. **Implement Knowledge Base Management UI (Medium Priority - 1 Day)**:
+   - Extend Next.js dashboard: Add filters (type/time), batch delete/edit forms, and file upload (handle via Spring multipart API).
+   - Tie to ChromaDB CRUD operations in backend.
+
+5. **Add Semantic Query with Fallback and Clustering (Lower Priority - 1-2 Days)**:
+   - Enhance search endpoint: If ChromaDB score < threshold, call Baidu API (use `requests` with your key), embed results, and pipe to Ollama for top-3 summary.
+   - For clustering: Add `scikit-learn` KMeans in a new `analytics.py`; generate Top-10 report as JSON for UI chart (e.g., via Recharts).
+
+Test incrementally: After each step, run end-to-end (ingest → query → email). If stuck on Spring integration, reference official docs. Once done, push to your `xu-ai-news-rag` repo! Let me know if you need code snippets for any part.
