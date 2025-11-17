@@ -14,6 +14,24 @@ Key goals:
 - Enable secure, user-friendly knowledge base interactions.
 - Provide fallback web searches for comprehensive query responses.
 
+## ✅ Implementation Status
+
+**All core features have been fully implemented!** 🎉
+
+- ✅ RSS Feed Ingestion with Scheduling
+- ✅ Email Notifications  
+- ✅ Spring Security + JWT Authentication
+- ✅ Knowledge Base Management (CRUD)
+- ✅ Semantic Query with Reranking
+- ✅ Web Search Fallback
+- ✅ Clustering Analytics
+- ✅ Ollama Integration
+- ✅ ChromaDB Vector Database
+- ✅ File Upload (Excel, Text)
+
+📖 **Quick Start**: See [START_GUIDE.md](START_GUIDE.md) for detailed setup instructions  
+📋 **Implementation Details**: See [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
+
 ## Features
 
 1. **Automated News Ingestion**:
@@ -55,74 +73,54 @@ Key goals:
 - **Security**: Spring Security with JWT tokens.
 - **Other**: Quartz Scheduler (tasks), Spring Mail (notifications), scikit-learn (clustering), Baidu Search API (fallback).
 
-## Installation & Setup
+## 🚀 Quick Start
 
-### Prerequisites
-- Java 17+ (for Spring Boot)
-- Node.js 18+ (for Next.js)
-- Python 3.8+ (for ingestion)
-- Ollama installed and running locally
-- PostgreSQL/MySQL (for user data persistence)
-- Redis (optional, for session caching)
+### Automated Setup (Recommended)
 
-### 1. Clone and Install Dependencies
 ```bash
+# 1. Clone repository
 git clone https://github.com/yourusername/xu-ai-news-rag.git
 cd xu-ai-news-rag
 
-# Backend
-cd backend
-mvn clean install
-pip install -r requirements.txt  # For Python ingestion scripts
+# 2. Install prerequisites
+# - Java 17+, Maven 3.6+, Python 3.8+, Ollama
 
-# Frontend
-cd ../frontend
-npm install
+# 3. Run startup script
+./start_services.sh
 ```
 
-### 2. Set Up Ollama
+The script will:
+- ✅ Start Ollama service
+- ✅ Download qwen2.5:3b model
+- ✅ Install Python dependencies
+- ✅ Start Python service (port 8000)
+- ✅ Compile and start Backend (port 8080)
+
+### Manual Setup
+
+See detailed instructions in [START_GUIDE.md](START_GUIDE.md)
+
+### Prerequisites
+
+- Java 17+ (for Spring Boot)
+- Maven 3.6+
+- Python 3.8+ (for AI services)
+- Ollama (for LLM)
+- PostgreSQL 12+ (or H2 for dev)
+
+### Configuration
+
 ```bash
-curl -fsSL https://ollama.ai/install.sh | sh
-ollama pull qwen2.5:3b
+# Copy and edit environment config
+cp env.example .env
+# Edit .env with your settings (database, email, API keys)
 ```
 
-### 3. Configure Environment
-Create `.env` files in `backend` and `frontend`:
-```env
-# backend/.env
-DB_URL=jdbc:postgresql://localhost:5432/newsdb
-JWT_SECRET=your-jwt-secret-key
-OLLAMA_URL=http://localhost:11434
-EMAIL_HOST=smtp.gmail.com
-EMAIL_FROM=your-email@gmail.com
-BAIDU_API_KEY=your-baidu-key  # For fallback search
+### Stop Services
 
-# feeds.yaml (in backend/ingestion)
-feeds:
-  - https://news.example.com/rss.xml
-  - https://techcrunch.com/feed/
-```
-
-### 4. Run Ingestion Script (Test)
 ```bash
-cd backend/ingestion
-python news_ingestor.py --schedule  # Fetches RSS, embeds to ChromaDB, sends email
+./stop_services.sh
 ```
-
-### 5. Start Services
-```bash
-# Backend (Spring Boot)
-cd backend
-mvn spring-boot:run  # API at http://localhost:8080
-
-# Frontend
-cd frontend
-npm run dev  # UI at http://localhost:3000
-```
-
-### 6. Initial Setup
-- Access `/api/auth/register` to create an admin user.
-- Run clustering script: `python analytics/cluster_keywords.py` for initial report.
 
 ## Usage
 

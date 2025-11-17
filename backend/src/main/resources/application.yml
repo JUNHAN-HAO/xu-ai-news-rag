@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: xu-news-rag
+  
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/xu_news}
+    username: ${SPRING_DATASOURCE_USERNAME:xu}
+    password: ${SPRING_DATASOURCE_PASSWORD:xu_pass}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  mail:
+    host: ${EMAIL_HOST:smtp.gmail.com}
+    port: ${EMAIL_PORT:587}
+    username: ${EMAIL_USERNAME:your-email@gmail.com}
+    password: ${EMAIL_PASSWORD:your-app-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+# Application Configuration
+app:
+  jwt:
+    secret: ${JWT_SECRET:xu-news-rag-secret-key-change-this-in-production-min-256-bits}
+    expiration: 86400000  # 24 hours in milliseconds
+  
+  ollama:
+    url: ${OLLAMA_URL:http://localhost:11434}
+    model: ${OLLAMA_MODEL:qwen2.5:3b}
+  
+  python:
+    service:
+      url: ${PYTHON_SERVICE_URL:http://localhost:8000}
+  
+  baidu:
+    api:
+      key: ${BAIDU_API_KEY:}
+      secret: ${BAIDU_API_SECRET:}
+  
+  email:
+    from: ${EMAIL_FROM:xu-news-rag@example.com}
+    notification:
+      enabled: ${EMAIL_NOTIFICATION_ENABLED:true}
+  
+  rss:
+    feeds-file: ${RSS_FEEDS_FILE:../feeds.yaml}
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.xu.news: DEBUG
+    org.springframework.security: DEBUG
+
+# Server
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: always
+    include-stacktrace: on_param
+
